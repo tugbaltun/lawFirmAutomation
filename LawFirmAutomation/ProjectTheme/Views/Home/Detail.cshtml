@@ -1,0 +1,75 @@
+﻿@model Continued.Entity.FoyKarti
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Continued.DAO
+@using Continued.Entity
+@using Continued.Transaction
+@{FoyKarti user = ViewBag.Query; }
+@{FoyKartiTransaction transaction = new FoyKartiTransaction();}
+@{<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.No):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.No)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Yetkili):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Yetkili)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Tarih):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Tarih)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Icerik):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Icerik)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Sonuc):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Sonuc)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Durum):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Durum)
+        </td>
+    </tr>
+</table>
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+  <div class="form-actions no-color">
+      <a href="@Url.Action("Update","Home")"><input type="button" value="Güncelle" class="btn btn-default" /></a>
+      <a href="@Url.Action("Delete","Home")"><input type="button" value="Sil" class="btn btn-default" /></a>
+      <a href="@Url.Action("Index","Home")"><input type="button" value="Geri Dön" class="btn btn-default" /></a>
+  </div>
+    }
+}
+
+
+

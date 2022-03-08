@@ -1,0 +1,321 @@
+﻿@model Continued.Entity.FoyKarti
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<p>
+    @Html.ActionLink("Yeni Kayıt", "Create", new { htmlAttributes = new { @style = "position:relative;float:right;" } })
+</p>
+@using Continued.DAO;
+@using Continued.Entity;
+@using Continued.Transaction;
+@{
+
+    FoyKartiDAO dAO = new FoyKartiDAO();
+    FoyKarti users = new FoyKarti();
+    FoyKartiTransaction transaction = new FoyKartiTransaction();
+
+}
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.No)
+        <div class="form-group">
+            <div class="input-group col-md-5" style="margin:0 auto 0 auto;">
+                @*<span class="glyphicon glyphicon-search" style="position:absolute"></span>*@
+                <input type="text" id="searchText" placeholder="Ara..." class="form-control" />
+            </div>
+        </div>
+        @*<div class="form-group" >
+                <h2>Search Panel</h2>
+                <div class="col-md-6" style="position:relative; float:left">
+                    @Html.DropDownList("Kategoriler", new SelectList(ViewBag.Kategoriler, "Value", "Text"), new { @class = "form-control", @id = "normalDropdown" })
+                </div>
+            </div>*@
+
+        <div>
+            <br /><br />
+
+            <table class="table table-bordered" id="myTable">
+                <thead>
+                    <tr>
+                        <th>
+                            
+                            @Html.DisplayNameFor(model => model.No)
+                            <span style="float:right" class="glyphicon glyphicon-sort-by-alphabet" onclick="sortTable(0)"></span>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Yetkili)
+                            <span style="float:right" class="glyphicon glyphicon-sort-by-alphabet" onclick="sortTable(1)"></span>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Tarih)
+                            <span style="float:right" class="glyphicon glyphicon-sort-by-alphabet" onclick="sortTable(2)"></span>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Icerik)
+                            <span style="float:right" class="glyphicon glyphicon-sort-by-alphabet" onclick="sortTable(3)"></span>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Sonuc)
+                            <span style="float:right" class="glyphicon glyphicon-sort-by-alphabet" onclick="sortTable(4)"></span>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Durum)
+                            <span style="float:right" class="glyphicon glyphicon-sort-by-alphabet" onclick="sortTable(5)"></span>
+                        </th>
+                        <th>
+                            Düzenle
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tblData"></tbody>
+            </table>
+
+            <div id="paged">
+
+            </div>
+        </div>
+    </div>
+
+}
+
+<script>
+    $(document).ready(function () {
+        //Initially load pagenumber=1
+
+
+        //////////////////////////////////////////////////
+        ///Searching Jquery Kodları//////////////////////////
+        //////////////////////////////////////////////////
+
+
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true;
+        }
+
+        $("#searchText").keyup(function () {
+            var searchText = $("#searchText").val().toLowerCase();
+            $(".Search").each(function () {
+                if (!Contains($(this).text().toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+
+                else {
+                    $(this).show();
+                }
+            })
+        });
+        GetPageData(1);
+    });
+
+
+
+    //////////////////////////////////////////////////
+    ///Paging Jquery Kodları//////////////////////////
+    //////////////////////////////////////////////////
+
+    function GetPageData(pageNum, pageSize) {
+        //After every trigger remove previous data and paging
+        $("#tblData").empty();
+        $("#paged").empty();
+        $.getJSON("/Home/GetPaggedData", { pageNumber: pageNum, pageSize: pageSize }, function (response) {
+            var rowData = "";
+            for (var i = 0; i < response.Data.length; i++) {
+                rowData = rowData +
+                    '<tr class="Search">' +
+                    '<td>' + response.Data[i].No + '</td>' +
+                    '<td>' + response.Data[i].Yetkili + '</td>' +
+                    '<td>' + response.Data[i].Tarih + '</td>' +
+                    '<td>' + response.Data[i].Icerik + '</td>' +
+                    '<td>' + response.Data[i].Sonuc + '</td >' +
+                    '<td>' + response.Data[i].Durum + '</td>' +
+                    '<td>' +
+                    '<a href = "/Home/Update?No=' + response.Data[i].No + '" id = "Guncelle" > <span class="glyphicon glyphicon-pencil"></span></a > ' +
+                    '     <a href="/Home/Detail?No=' + response.Data[i].No + '" id="Detaylar" ><span class="glyphicon glyphicon-file"></span></a>' +
+                    '     <a href="/Home/Delete?No=' + response.Data[i].No + '" id="Sil"><span class="glyphicon glyphicon-trash"></span></a>' +
+                    '</td >' +
+                    '</tr > ';
+            }
+
+            $("#tblData").append(rowData);
+            PaggingTemplate(response.TotalPages, response.CurrentPage);
+        });
+    }
+
+    function GeriDondur(n) {
+
+        $("#Guncelle").click(function () {
+            alert(n);
+            return n;
+        });
+    }
+
+    //This is paging temlpate ,you should just copy paste
+    function PaggingTemplate(totalPage, currentPage) {
+        var template = "";
+        var TotalPages = totalPage;
+        var CurrentPage = currentPage;
+        var PageNumberArray = Array();
+
+
+        var countIncr = 1;
+        for (var i = currentPage; i <= totalPage; i++) {
+            PageNumberArray[0] = currentPage;
+            if (totalPage != currentPage && PageNumberArray[countIncr - 1] != totalPage) {
+                PageNumberArray[countIncr] = i + 1;
+            }
+            countIncr++;
+        };
+        PageNumberArray = PageNumberArray.slice(0, 5);
+        var FirstPage = 1;
+        var LastPage = totalPage;
+        if (totalPage != currentPage) {
+            var ForwardOne = currentPage + 1;
+        }
+        var BackwardOne = 1;
+        if (currentPage > 1) {
+            BackwardOne = currentPage - 1;
+        }
+
+        template = "<p>" + CurrentPage + " / " + TotalPages
+        template = template + '<ul class="pager">' +
+            '<li><a href="#" onclick="GetPageData(' + FirstPage + ')"><i class="fa fa-fast-backward"></i>&nbsp;İlk</a></li>' +
+            '<li><a href="#" onclick="GetPageData(' + BackwardOne + ')"><i class="glyphicon glyphicon-backward"></i></a>';
+
+        var numberingLoop = "";
+        for (var i = 0; i < PageNumberArray.length; i++) {
+            numberingLoop = numberingLoop + '<a class="page-number active" onclick="GetPageData(' + PageNumberArray[i] + ')" href="#">' + PageNumberArray[i] + ' &nbsp;&nbsp;</a>'
+        }
+        template = template + numberingLoop + '<a href="#" onclick="GetPageData(' + ForwardOne + ')" ><i class="glyphicon glyphicon-forward"></i></a></li>' +
+            '<li><a href="#" onclick="GetPageData(' + LastPage + ')">Son&nbsp;<i class="fa fa-fast-forward"></i></a></li></ul>';
+        $("#paged").append(template);
+        $('#selectedId').change(function () {
+            GetPageData(1, $(this).val());
+        });
+    }
+
+    $(function () {
+        $("#normalDropdown").chosen();
+    });
+
+    //////////////////////////////////////////////////
+    ///Sorting Jquery Kodları//////////////////////////
+    //////////////////////////////////////////////////
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+</script>
+
+
+
+
+@*<table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Yetkili)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Icerik)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sonuc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Durum)
+            </th>
+        </tr>
+
+        @using Continued.DAO;
+        @using Continued.Entity;
+        @using Continued.Transaction;
+        @{
+
+            FoyKartiDAO dAO = new FoyKartiDAO();
+            FoyKarti users = new FoyKarti();
+            FoyKartiTransaction transaction = new FoyKartiTransaction();
+
+            foreach (FoyKarti user in transaction.List(users))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.Yetkili)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.Tarih)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.Icerik)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.Sonuc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.Durum)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Güncelle", "Update", new { No = user.No }) |
+                        @Html.ActionLink("Detaylar", "Detail", new { No = user.No }) |
+                        @Html.ActionLink("Sil", "Delete", new { No = user.No })
+                    </td>
+                </tr>
+            }
+        }
+    </table>*@

@@ -1,0 +1,73 @@
+﻿@model Continued.Entity.FoyKarti
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Continued.DAO
+@using Continued.Entity
+@using Continued.Transaction
+@{FoyKarti user = ViewBag.Query; }
+@{FoyKartiTransaction transaction = new FoyKartiTransaction();}
+<h2>Delete</h2>
+<h3>Kaydı silmek istediğinize emin misiniz?</h3>
+@{<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.No):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.No)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Yetkili):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Yetkili)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Tarih):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Tarih)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Icerik):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Icerik)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Sonuc):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Sonuc)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Durum):
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => user.Durum)
+        </td>
+    </tr>
+</table>
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Sil" class="btn btn-default" /> |
+            @Html.ActionLink("Listeye Geri Dön", "Index")
+        </div>
+    }
+}

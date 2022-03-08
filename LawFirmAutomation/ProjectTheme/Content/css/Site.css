@@ -1,0 +1,121 @@
+﻿@media screen and (min-width:768px) {
+    #menuIcon {
+        position: relative;
+        float: left;
+        margin: 0px 5px 0 -200px;
+        font-size: 28px;
+    }
+
+    #logo {
+        margin: 0 0 0 75px;
+    }
+
+    #logoimg {
+        position: relative;
+        float: left;
+        width: 130px;
+        height: 40px;
+    }
+
+    #hidingIcon {
+        visibility: visible;
+        
+        margin: 0 20px 0 0;
+    }
+    #userLink {
+        position: absolute;
+        float: left;
+        margin: 0px 20px 0 75%;
+    }
+    #userIcon {
+        visibility: hidden;
+    }
+
+    #userDown {
+        border: 1px solid #343a40;
+        margin: 20px 20px 0 20px;
+        width: 60px;
+        height: auto;
+    }
+
+    #ddIcon {
+        top: -23px;
+        margin-left: 50px;
+        color: #343a40;
+        font-size:12px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    #userLink {
+        position: absolute;
+        float: left;
+        margin: 0px 15px 0 72%;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1199px) {
+    #userLink {
+        position: absolute;
+        float: left;
+        margin: 0px 15px 0 80%;
+    }
+}
+
+@media (min-width: 1200px) {
+    #userLink {
+        position: absolute;
+        float: left;
+        margin: 0px 15px 0 86%;
+    }
+}
+
+@media screen and (max-width:767px) {
+    #hidingIcon {
+        visibility: hidden;
+    }
+
+    #userIcon {
+        visibility: visible;
+        float: left;
+        position: absolute;
+        margin: 18px 0 0 10px;
+        color: gray;
+        font-size: 30px;
+        float: right;
+    }
+
+    #logo {
+        margin: 0 0 0 55px;
+    }
+
+    #logoimg {
+        width: 100%;
+        height: 40px;
+    }
+
+    #menuIcon {
+        /*margin:30px 0 0 -335px;*/
+        position: absolute;
+        float: left;
+        margin: 25px 0 0 8px;
+        font-size: 28px;
+    }
+
+    #userDown {
+        border: 1px solid #343a40;
+        margin: 20px 5px 0 -30px;
+        width: 28px;
+        height: auto;
+    }
+
+    #ddIcon {
+        top: -23px;
+        margin-left: 50px;
+        color: #343a40;
+    }
+}
+
+
+
+

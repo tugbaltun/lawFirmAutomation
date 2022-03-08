@@ -1,0 +1,79 @@
+﻿@model Continued.Entity.FoyKarti
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+</head>
+@{
+    DateTime rngMin = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue;
+
+    DateTime rngMax = (DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue;
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Users</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Yetkili, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Yetkili, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Yetkili, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Tarih, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Tarih, new { htmlAttributes = new { @class = "form-control", @id = "datepicker", @style = "width:270px;", @value = "@DateTime.Now.Date" } })
+                @*<span style="margin:0px 0 0 250px;top:-30px;visibility:visible" class="glyphicon glyphicon-calendar"></span>*@
+                @Html.ValidationMessageFor(model => model.Tarih, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Icerik, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+
+                @Html.TextAreaFor(model => model.Icerik, new { htmlAttributes = new { @class = "form-control col-md-6", cols = "20", @rows = "12" } })
+                @Html.ValidationMessageFor(model => model.Icerik, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sonuc, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Sonuc, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Sonuc, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Durum, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.RadioButtonFor(m => m.Durum, "Bitti", new { Checked = "checked" }) Bitti
+                @Html.RadioButtonFor(m => m.Durum, "Devam") Devam
+                @Html.ValidationMessageFor(model => model.Sonuc, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+
+        <div>
+            @Html.ActionLink("Listeye Geri Dön", "Index")
+        </div>
+    </div>
+}
+
+
+
+
